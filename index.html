@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analizer IA local</title>
+    <title>Analizer IA local — Motor de Explosividad Musical para DJs | by @tomasanfo</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23070709' stroke='%23DC2626' stroke-width='2'/><path d='M8 18v-4M12 22V10M16 25V7M20 21V11M24 18v-4' stroke='%23DC2626' stroke-width='2.5' stroke-linecap='round'/></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Librería JSZip para armar el .ZIP al vuelo desde la carpeta v.1.2 de GitHub -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -69,9 +71,11 @@
             </div>
             <div class="flex items-center gap-4">
                 <span class="text-xs font-mono text-zinc-500 hidden sm:inline">by @tomasanfo</span>
-                <a href="https://github.com" target="_blank" class="px-4 py-2 rounded-lg bg-crimson hover:bg-crimsonHover text-white text-xs font-semibold transition">
-                    Ver Código / Descargar
-                </a>
+                <!-- BOTÓN QUE EMPAQUETA Y DESCARGA LA CARPETA v.1.2 EN .ZIP DIRECTO -->
+                <button onclick="descargarCarpetaComoZip(this)" class="dl-btn px-4 py-2 rounded-lg bg-crimson hover:bg-crimsonHover text-white text-xs font-semibold transition flex items-center gap-2 shadow-lg shadow-crimson/20 cursor-pointer">
+                    <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Z"/><path d="M7.25 7.689V2a.75.75 0 0 1 1.5 0v5.689l1.97-1.969a.749.749 0 1 1 1.06 1.06l-3.25 3.25a.749.749 0 0 1-1.06 0L4.22 6.78a.749.749 0 1 1 1.06-1.06l1.97 1.969Z"/></svg>
+                    <span class="btn-text">Descargar v1.2 (.ZIP)</span>
+                </button>
             </div>
         </div>
     </nav>
@@ -89,17 +93,29 @@
             <p class="max-w-2xl mx-auto text-zinc-400 text-lg sm:text-xl leading-relaxed mb-10">
                 <strong>Analizer IA local</strong> detecta el drop de cada canción en tu PC, mide qué tan fuerte explota combinando redes neuronales (<code class="text-crimsonGlow font-mono text-base">LAION-CLAP</code>) + DSP, y graba las estrellitas de energía comparando cada tema con los de su mismo estilo directo en tu Rekordbox.
             </p>
-            <div class="flex flex-wrap justify-center gap-4 mb-16">
-                <a href="#simulador" class="px-7 py-3.5 rounded-xl bg-crimson hover:bg-crimsonHover text-white font-semibold text-sm transition shadow-lg shadow-crimson/25">
+            
+            <!-- BOTÓN PRINCIPAL DE DESCARGA DIRECTA -->
+            <div class="flex flex-wrap justify-center gap-4 mb-6">
+                <button onclick="descargarCarpetaComoZip(this)" class="dl-btn px-7 py-3.5 rounded-xl bg-crimson hover:bg-crimsonHover text-white font-semibold text-sm transition shadow-lg shadow-crimson/25 flex items-center gap-2.5 cursor-pointer">
+                    <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Z"/><path d="M7.25 7.689V2a.75.75 0 0 1 1.5 0v5.689l1.97-1.969a.749.749 0 1 1 1.06 1.06l-3.25 3.25a.749.749 0 0 1-1.06 0L4.22 6.78a.749.749 0 1 1 1.06-1.06l1.97 1.969Z"/></svg>
+                    <span class="btn-text">Descargar Directo v1.2 (.ZIP)</span>
+                </button>
+                <a href="#simulador" class="px-7 py-3.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-white/10 text-zinc-200 font-semibold text-sm transition">
                     Probar Simulador de Calibración
-                </a>
-                <a href="#arquitectura" class="px-7 py-3.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-white/10 text-zinc-200 font-semibold text-sm transition">
-                    Ver Arquitectura Técnica
                 </a>
             </div>
 
+            <!-- Nota rápida de instalación -->
+            <div class="max-w-xl mx-auto mb-16 px-4 py-2.5 rounded-xl bg-bgCard/90 border border-white/10 text-xs font-mono text-zinc-400 flex flex-wrap items-center justify-center gap-2">
+                <span class="text-crimsonGlow font-bold">⚡ Instalación:</span>
+                <span>1. Extraé el <strong class="text-zinc-200">.ZIP</strong></span>
+                <span class="text-zinc-600">&rarr;</span>
+                <span>2. Entrá a <code class="text-zinc-200 bg-white/5 px-1.5 py-0.5 rounded">v.1.2</code></span>
+                <span class="text-zinc-600">&rarr;</span>
+                <span>3. Doble clic en <code class="text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded font-bold">Installer.vbs</code></span>
+            </div>
 
-   <!-- LIVE APP UI REPLICA (DARK CRIMSON MINIMALIST) -->
+            <!-- LIVE APP UI REPLICA (DARK CRIMSON MINIMALIST) -->
             <div class="max-w-4xl mx-auto rounded-2xl bg-bgCard border border-white/10 red-glow overflow-hidden text-left">
                 <!-- Window Titlebar -->
                 <div class="px-5 py-3.5 bg-black/60 border-b border-white/5 flex items-center justify-between">
@@ -243,7 +259,7 @@
         </div>
     </section>
 
-    <!-- RECOMENDACIONES DE USO Y RECALIBRACIÓN (NUEVA SECCIÓN) -->
+    <!-- RECOMENDACIONES DE USO Y RECALIBRACIÓN -->
     <section id="recomendaciones" class="py-24 px-6 border-b border-white/5">
         <div class="max-w-5xl mx-auto">
             <div class="text-center max-w-2xl mx-auto mb-14">
@@ -351,7 +367,7 @@
         </div>
     </section>
 
-    <!-- SECCIÓN DE FEEDBACK Y COMUNIDAD (NUEVA) -->
+    <!-- SECCIÓN DE FEEDBACK Y COMUNIDAD -->
     <section id="feedback" class="py-16 px-6">
         <div class="max-w-4xl mx-auto rounded-3xl bg-gradient-to-r from-zinc-900 via-bgCard to-zinc-900 border border-white/10 p-8 sm:p-12 text-center relative overflow-hidden">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-crimson/10 border border-crimson/20 text-crimsonGlow text-xs font-mono mb-4">
@@ -367,9 +383,9 @@
                 <a href="https://instagram.com/tomasanfo" target="_blank" class="px-6 py-3 rounded-xl bg-crimson hover:bg-crimsonHover text-white text-xs sm:text-sm font-semibold transition shadow-lg shadow-crimson/20">
                     Mandar feedback a @tomasanfo
                 </a>
-                <a href="https://github.com" target="_blank" class="px-6 py-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-white/10 text-xs sm:text-sm font-mono transition">
-                    Abrir Issue / Sugerencia en GitHub
-                </a>
+                <button onclick="descargarCarpetaComoZip(this)" class="dl-btn px-6 py-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-white/10 text-xs sm:text-sm font-mono transition cursor-pointer">
+                    <span class="btn-text">Descargar v1.2 (.ZIP)</span>
+                </button>
             </div>
         </div>
     </section>
@@ -388,8 +404,71 @@
         </div>
     </footer>
 
-    <!-- SCRIPT DEL SIMULADOR INTERACTIVO -->
+    <!-- SCRIPTS DEL SIMULADOR Y EMPAQUETADOR .ZIP DIRECTO -->
     <script>
+        // Lista exacta de archivos dentro de tu carpeta v.1.2 subida en GitHub
+        const archivosCarpetaV12 = [
+            "audio_analyzer.py",
+            "config.py",
+            "db_cache.py",
+            "gui.py",
+            "icon_generator.py",
+            "Installer.vbs",
+            "installer_gui.py",
+            "main.py",
+            "rb_db_sync.py",
+            "requirements.txt",
+            "tag_writer.py",
+            "Uninstaller.vbs",
+            "uninstaller_gui.py"
+        ];
+
+        // Función que toma la carpeta suelta v.1.2 del repositorio y la baja como un único .ZIP
+        async function descargarCarpetaComoZip(btnElement) {
+            const textSpan = btnElement.querySelector('.btn-text') || btnElement;
+            const originalText = textSpan.innerText;
+            btnElement.disabled = true;
+            textSpan.innerText = "Preparando v.1.2.zip...";
+
+            const rawBaseUrl = "https://raw.githubusercontent.com/Tomasanfo/Analizer.IA/main/v.1.2/";
+
+            try {
+                const zip = new JSZip();
+                const folder = zip.folder("v.1.2");
+
+                // Descarga en paralelo los 13 archivos de la carpeta v.1.2 desde tu repo
+                await Promise.all(archivosCarpetaV12.map(async (filename) => {
+                    const response = await fetch(rawBaseUrl + filename);
+                    if (!response.ok) throw new Error("No se pudo obtener " + filename);
+                    const content = await response.blob();
+                    folder.file(filename, content);
+                }));
+
+                // Genera el archivo .zip en el navegador y dispara la descarga directa
+                const zipBlob = await zip.generateAsync({ type: "blob" });
+                const downloadUrl = URL.createObjectURL(zipBlob);
+                const a = document.createElement("a");
+                a.href = downloadUrl;
+                a.download = "v.1.2.zip";
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(downloadUrl);
+
+                textSpan.innerText = "✔ ¡v.1.2.zip Descargado!";
+                setTimeout(() => {
+                    textSpan.innerText = originalText;
+                    btnElement.disabled = false;
+                }, 3000);
+            } catch (err) {
+                // Fallback inmediato: descarga el ZIP directo del repositorio de GitHub si falla la red
+                window.location.href = "https://github.com/Tomasanfo/Analizer.IA/archive/refs/heads/main.zip";
+                textSpan.innerText = originalText;
+                btnElement.disabled = false;
+            }
+        }
+
+        // Datos del Simulador
         const sampleTracks = {
             "Melodic Techno": [
                 { name: "Anyma, Chris Avantgarde - Consciousness.mp3", score: 97, stars: 5, label: "5★ Tope de tu carpeta" },
