@@ -56,25 +56,40 @@
 <body class="font-sans antialiased selection:bg-crimson selection:text-white">
 
     <!-- NAVBAR -->
-    <nav class="fixed top-0 w-full z-50 bg-bgMain/80 backdrop-blur-md border-b border-white/5">
-        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
+    <nav class="fixed top-0 w-full z-50 bg-bgMain/90 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+            
+            <!-- Logo / Título -->
+            <div class="flex items-center gap-2.5 shrink-0">
                 <span class="w-2.5 h-2.5 rounded-full bg-crimson animate-pulse"></span>
-                <span class="font-bold tracking-tight text-lg">Analizer IA local</span>
-                <span class="text-xs font-mono uppercase px-2 py-0.5 rounded bg-crimson/10 text-crimsonGlow border border-crimson/20">v1.2</span>
+                <span class="font-bold tracking-tight text-base sm:text-lg whitespace-nowrap">Analizer IA local</span>
+                <span class="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-crimson/10 text-crimsonGlow border border-crimson/20">v1.2</span>
             </div>
-            <div class="hidden md:flex items-center gap-8 text-sm text-zinc-400">
+
+            <!-- Enlaces centrales -->
+            <div class="hidden lg:flex items-center gap-6 text-xs xl:text-sm text-zinc-400">
                 <a href="#problema" class="hover:text-white transition">El Problema</a>
                 <a href="#arquitectura" class="hover:text-white transition">Motor Híbrido IA</a>
                 <a href="#simulador" class="hover:text-white transition">Demo Interactiva</a>
                 <a href="#rekordbox" class="hover:text-white transition">Inyección Rekordbox</a>
             </div>
-            <div class="flex items-center gap-4">
-                <span class="text-xs font-mono text-zinc-500 hidden sm:inline">by @tomasanfo</span>
-                <!-- BOTÓN QUE EMPAQUETA Y DESCARGA LA CARPETA v.1.2 EN .ZIP DIRECTO -->
-                <button onclick="descargarCarpetaComoZip(this)" class="dl-btn px-4 py-2 rounded-lg bg-crimson hover:bg-crimsonHover text-white text-xs font-semibold transition flex items-center gap-2 shadow-lg shadow-crimson/20 cursor-pointer">
+
+            <!-- Botones de acción derecha -->
+            <div class="flex items-center gap-2.5 shrink-0">
+                <span class="text-xs font-mono text-zinc-500 hidden xl:inline">by @tomasanfo</span>
+                
+                <!-- Botón GitHub -->
+                <a href="https://github.com/Tomasanfo/Analizer.IA" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-white/10 text-zinc-200 hover:text-white text-xs font-semibold transition flex items-center gap-1.5" title="Ver repositorio en GitHub">
+                    <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                    </svg>
+                    <span class="hidden sm:inline">GitHub</span>
+                </a>
+
+                <!-- Botón Descarga ZIP -->
+                <button onclick="descargarCarpetaComoZip(this)" class="dl-btn px-3.5 py-2 rounded-lg bg-crimson hover:bg-crimsonHover text-white text-xs font-semibold transition flex items-center gap-1.5 shadow-lg shadow-crimson/20 cursor-pointer">
                     <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Z"/><path d="M7.25 7.689V2a.75.75 0 0 1 1.5 0v5.689l1.97-1.969a.749.749 0 1 1 1.06 1.06l-3.25 3.25a.749.749 0 0 1-1.06 0L4.22 6.78a.749.749 0 1 1 1.06-1.06l1.97 1.969Z"/></svg>
-                    <span class="btn-text">Descargar v1.2 (.ZIP)</span>
+                    <span class="btn-text">Descargar <span class="hidden sm:inline">v1.2</span> (.ZIP)</span>
                 </button>
             </div>
         </div>
@@ -94,14 +109,20 @@
                 <strong>Analizer IA local</strong> detecta el drop de cada canción en tu PC, mide qué tan fuerte explota combinando redes neuronales (<code class="text-crimsonGlow font-mono text-base">LAION-CLAP</code>) + DSP, y graba las estrellitas de energía comparando cada tema con los de su mismo estilo directo en tu Rekordbox.
             </p>
             
-            <!-- BOTÓN PRINCIPAL DE DESCARGA DIRECTA -->
+            <!-- BOTONES PRINCIPALES -->
             <div class="flex flex-wrap justify-center gap-4 mb-6">
                 <button onclick="descargarCarpetaComoZip(this)" class="dl-btn px-7 py-3.5 rounded-xl bg-crimson hover:bg-crimsonHover text-white font-semibold text-sm transition shadow-lg shadow-crimson/25 flex items-center gap-2.5 cursor-pointer">
                     <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Z"/><path d="M7.25 7.689V2a.75.75 0 0 1 1.5 0v5.689l1.97-1.969a.749.749 0 1 1 1.06 1.06l-3.25 3.25a.749.749 0 0 1-1.06 0L4.22 6.78a.749.749 0 1 1 1.06-1.06l1.97 1.969Z"/></svg>
                     <span class="btn-text">Descargar Directo v1.2 (.ZIP)</span>
                 </button>
-                <a href="#simulador" class="px-7 py-3.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-white/10 text-zinc-200 font-semibold text-sm transition">
-                    Probar Simulador de Calibración
+                <a href="https://github.com/Tomasanfo/Analizer.IA" target="_blank" rel="noopener noreferrer" class="px-6 py-3.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-white/10 text-zinc-200 hover:text-white font-semibold text-sm transition flex items-center gap-2.5">
+                    <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                    </svg>
+                    <span>Ver Repositorio en GitHub</span>
+                </a>
+                <a href="#simulador" class="px-6 py-3.5 rounded-xl bg-zinc-900/60 hover:bg-zinc-800 border border-white/10 text-zinc-300 font-semibold text-sm transition">
+                    Probar Simulador
                 </a>
             </div>
 
@@ -115,9 +136,8 @@
                 <span>3. Doble clic en <code class="text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded font-bold">Installer.vbs</code></span>
             </div>
 
-            <!-- LIVE APP UI REPLICA (DARK CRIMSON MINIMALIST) -->
+            <!-- LIVE APP UI REPLICA -->
             <div class="max-w-4xl mx-auto rounded-2xl bg-bgCard border border-white/10 red-glow overflow-hidden text-left">
-                <!-- Window Titlebar -->
                 <div class="px-5 py-3.5 bg-black/60 border-b border-white/5 flex items-center justify-between">
                     <div class="flex items-center gap-2.5">
                         <div class="w-3 h-3 rounded-full bg-crimson"></div>
@@ -130,15 +150,13 @@
                     </span>
                 </div>
 
-                <!-- App Body -->
                 <div class="p-6 space-y-5">
-                    <!-- Path selector + Action buttons mock -->
                     <div class="flex flex-wrap sm:flex-nowrap gap-2.5">
                         <div class="flex-1 bg-bgConsole border border-white/10 rounded-lg px-4 py-2.5 text-xs font-mono text-zinc-400 flex items-center justify-between">
                             <span class="truncate">C:\Users\Desktop\Musica_Club_Analizada</span>
                             <span class="text-emerald-400 ml-2 shrink-0">✔ 1,840 pistas</span>
                         </div>
-                        <button class="px-4 py-2.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 border border-white/10 text-zinc-200 text-xs font-mono font-semibold transition shrink-0" title="Limpiar ratings antes de re-comparar todo el lote">
+                        <button class="px-4 py-2.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 border border-white/10 text-zinc-200 text-xs font-mono font-semibold transition shrink-0">
                             🗑 Borrar Estrellas
                         </button>
                         <button class="px-5 py-2.5 rounded-lg bg-crimson text-xs font-bold uppercase tracking-wider shrink-0">
@@ -146,7 +164,6 @@
                         </button>
                     </div>
 
-                    <!-- Switches mock -->
                     <div class="flex flex-wrap gap-6 text-xs text-zinc-300 py-1">
                         <label class="flex items-center gap-2">
                             <span class="w-7 h-4 rounded-full bg-crimson flex items-center justify-end px-0.5"><span class="w-3 h-3 rounded-full bg-white"></span></span>
@@ -166,7 +183,6 @@
                         </label>
                     </div>
 
-                    <!-- Progress bar -->
                     <div>
                         <div class="flex justify-between text-xs font-mono mb-1.5">
                             <span class="text-zinc-400">Tu Colección: <strong class="text-white">1,840</strong> &bull; Comparadas entre sí: <strong class="text-crimsonGlow">1,840 / 1,840</strong></span>
@@ -177,7 +193,6 @@
                         </div>
                     </div>
 
-                    <!-- Console Output -->
                     <div class="bg-bgConsole rounded-xl p-4 font-mono text-xs space-y-1.5 border border-white/5 text-zinc-300">
                         <div class="text-zinc-500">[INFO] Agrupando tus pistas por género y armando escala relativa con tu propia carpeta...</div>
                         <div><span class="text-crimsonGlow">[Melodic Techno • 42 tracks tuyos]</span> Anyma - Pictures Of You.mp3 &rarr; Drop @01:12 &rarr; <span class="text-white font-bold">🔥 Top 96% (5★ en tu Melodic Techno)</span></div>
@@ -271,7 +286,6 @@
             </div>
 
             <div class="grid md:grid-cols-2 gap-6">
-                <!-- Tip Principal: Borrar estrellas y re-analizar -->
                 <div class="p-8 rounded-2xl bg-gradient-to-br from-crimson/15 via-bgCard to-bgCard border border-crimson/30 relative overflow-hidden">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-crimson/20 text-crimsonGlow font-mono text-xs font-bold mb-4">
                         ★ REGLA DE ORO AL RE-PUNTUAR
@@ -287,7 +301,6 @@
                     </p>
                 </div>
 
-                <!-- Otros 2 consejos clave -->
                 <div class="space-y-6">
                     <div class="p-6 rounded-2xl bg-bgCard card-border">
                         <div class="text-crimsonGlow font-mono text-xs font-bold mb-1.5">01 / CANTIDAD MÍNIMA POR GÉNERO</div>
@@ -318,7 +331,6 @@
             </div>
 
             <div class="grid md:grid-cols-2 gap-8">
-                <!-- Columna 1: IA + DSP -->
                 <div class="p-8 rounded-2xl bg-bgCard card-border space-y-6">
                     <div class="flex items-center justify-between">
                         <span class="px-3 py-1 rounded bg-crimson/15 text-crimsonGlow font-mono text-xs font-bold">audio_analyzer.py</span>
@@ -341,7 +353,6 @@
                     </ul>
                 </div>
 
-                <!-- Columna 2: Rekordbox Sync -->
                 <div id="rekordbox" class="p-8 rounded-2xl bg-bgCard card-border space-y-6">
                     <div class="flex items-center justify-between">
                         <span class="px-3 py-1 rounded bg-crimson/15 text-crimsonGlow font-mono text-xs font-bold">rb_db_sync.py + tag_writer.py</span>
@@ -380,8 +391,14 @@
                 Esta herramienta nació para resolver un problema real en cabina organizando bibliotecas grandes. Si la probás con tus sets, tenés ideas para mejorar la calibración, querés sugerir una función nueva o encontraste algún detalle, escribime sin drama.
             </p>
             <div class="flex flex-wrap justify-center gap-4">
-                <a href="https://instagram.com/tomasanfo" target="_blank" class="px-6 py-3 rounded-xl bg-crimson hover:bg-crimsonHover text-white text-xs sm:text-sm font-semibold transition shadow-lg shadow-crimson/20">
+                <a href="https://instagram.com/tomasanfo" target="_blank" rel="noopener noreferrer" class="px-6 py-3 rounded-xl bg-crimson hover:bg-crimsonHover text-white text-xs sm:text-sm font-semibold transition shadow-lg shadow-crimson/20">
                     Mandar feedback a @tomasanfo
+                </a>
+                <a href="https://github.com/Tomasanfo/Analizer.IA" target="_blank" rel="noopener noreferrer" class="px-6 py-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-white/10 text-xs sm:text-sm font-semibold transition flex items-center gap-2">
+                    <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                    </svg>
+                    <span>Ver Repositorio en GitHub</span>
                 </a>
                 <button onclick="descargarCarpetaComoZip(this)" class="dl-btn px-6 py-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-white/10 text-xs sm:text-sm font-mono transition cursor-pointer">
                     <span class="btn-text">Descargar v1.2 (.ZIP)</span>
@@ -398,37 +415,33 @@
                 <span class="font-display font-bold text-sm">Analizer IA local</span>
                 <span class="text-xs text-zinc-500">&mdash; Motor de Explosividad Musical relativo a tu biblioteca</span>
             </div>
-            <div class="text-xs font-mono text-zinc-400">
-                Diseñado y desarrollado <span class="text-white font-semibold">by @tomasanfo</span> &bull; Se agradecen tus ideas y feedback
+            <div class="flex items-center gap-4 text-xs font-mono text-zinc-400">
+                <span>Diseñado y desarrollado <span class="text-white font-semibold">by @tomasanfo</span></span>
+                <span>&bull;</span>
+                <a href="https://github.com/Tomasanfo/Analizer.IA" target="_blank" rel="noopener noreferrer" class="text-zinc-300 hover:text-white flex items-center gap-1.5 transition">
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 16 16">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                    </svg>
+                    GitHub
+                </a>
             </div>
         </div>
     </footer>
 
-    <!-- SCRIPTS DEL SIMULADOR Y EMPAQUETADOR .ZIP DIRECTO -->
+    <!-- SCRIPTS -->
     <script>
-        // Lista exacta de archivos dentro de tu carpeta v.1.2 subida en GitHub
         const archivosCarpetaV12 = [
-            "audio_analyzer.py",
-            "config.py",
-            "db_cache.py",
-            "gui.py",
-            "icon_generator.py",
-            "Installer.vbs",
-            "installer_gui.py",
-            "main.py",
-            "rb_db_sync.py",
-            "requirements.txt",
-            "tag_writer.py",
-            "Uninstaller.vbs",
-            "uninstaller_gui.py"
+            "audio_analyzer.py", "config.py", "db_cache.py", "gui.py",
+            "icon_generator.py", "Installer.vbs", "installer_gui.py",
+            "main.py", "rb_db_sync.py", "requirements.txt",
+            "tag_writer.py", "Uninstaller.vbs", "uninstaller_gui.py"
         ];
 
-        // Función que toma la carpeta suelta v.1.2 del repositorio y la baja como un único .ZIP
         async function descargarCarpetaComoZip(btnElement) {
             const textSpan = btnElement.querySelector('.btn-text') || btnElement;
             const originalText = textSpan.innerText;
             btnElement.disabled = true;
-            textSpan.innerText = "Preparando v.1.2.zip...";
+            textSpan.innerText = "Preparando...";
 
             const rawBaseUrl = "https://raw.githubusercontent.com/Tomasanfo/Analizer.IA/main/v.1.2/";
 
@@ -436,7 +449,6 @@
                 const zip = new JSZip();
                 const folder = zip.folder("v.1.2");
 
-                // Descarga en paralelo los 13 archivos de la carpeta v.1.2 desde tu repo
                 await Promise.all(archivosCarpetaV12.map(async (filename) => {
                     const response = await fetch(rawBaseUrl + filename);
                     if (!response.ok) throw new Error("No se pudo obtener " + filename);
@@ -444,7 +456,6 @@
                     folder.file(filename, content);
                 }));
 
-                // Genera el archivo .zip en el navegador y dispara la descarga directa
                 const zipBlob = await zip.generateAsync({ type: "blob" });
                 const downloadUrl = URL.createObjectURL(zipBlob);
                 const a = document.createElement("a");
@@ -455,20 +466,18 @@
                 a.remove();
                 URL.revokeObjectURL(downloadUrl);
 
-                textSpan.innerText = "✔ ¡v.1.2.zip Descargado!";
+                textSpan.innerText = "✔ ¡Descargado!";
                 setTimeout(() => {
                     textSpan.innerText = originalText;
                     btnElement.disabled = false;
                 }, 3000);
             } catch (err) {
-                // Fallback inmediato: descarga el ZIP directo del repositorio de GitHub si falla la red
                 window.location.href = "https://github.com/Tomasanfo/Analizer.IA/archive/refs/heads/main.zip";
                 textSpan.innerText = originalText;
                 btnElement.disabled = false;
             }
         }
 
-        // Datos del Simulador
         const sampleTracks = {
             "Melodic Techno": [
                 { name: "Anyma, Chris Avantgarde - Consciousness.mp3", score: 97, stars: 5, label: "5★ Tope de tu carpeta" },
@@ -519,7 +528,6 @@
             }).join('');
         }
 
-        // Inicializar vista por defecto
         filterGenre('Melodic Techno');
     </script>
 </body>
