@@ -33,6 +33,10 @@ CREATE TABLE IF NOT EXISTS tracks (
     explosivity     REAL,
     percentile      INTEGER,
     stars           INTEGER,
+    peak_score      REAL,
+    sustained_score REAL,
+    bpm             REAL,
+    role            INTEGER,
     group_mode      TEXT DEFAULT '',
     analyzed_at     REAL
 );
@@ -44,6 +48,7 @@ ANALYSIS_COLS = [
     "genre_original", "genre_ai", "genre_ai_conf", "drop_start", "ai_energy",
     "used_clap", "drop_rms_p95", "onset_punch", "sub_bass_weight",
     "drop_contrast", "dsp_score", "explosivity", "analyzed_at",
+    "peak_score", "sustained_score", "bpm",
 ]
 
 
@@ -72,7 +77,16 @@ class TrackCache:
         self.conn.row_factory = sqlite3.Row
         with self.lock:
             self.conn.executescript(SCHEMA)
+            self._migrate()
             self.conn.commit()
+
+    def _migrate(self):
+        """Agrega las columnas nuevas a una caché creada con una versión anterior."""
+        have = {r["name"] for r in self.conn.execute("PRAGMA table_info(tracks)").fetchall()}
+        for col, typ in (("peak_score", "REAL"), ("sustained_score", "REAL"),
+                         ("bpm", "REAL"), ("role", "INTEGER")):
+            if col not in have:
+                self.conn.execute(f"ALTER TABLE tracks ADD COLUMN {col} {typ}")
 
     # ── lectura / escritura básica ──────────────────────────
     def get(self, path):
@@ -156,7 +170,13 @@ class TrackCache:
                 genre = C.GLOBAL_LABEL
             key = genre.casefold()
             g = groups.setdefault(key, {"name": genre, "items": []})
-            g["items"].append((r["path"], float(r["explosivity"])))
+            expl = float(r["explosivity"])
+            sus = r.get("sustained_score")
+            pk = r.get("peak_score")
+            sus = expl if sus is None else float(sus)
+            pk = expl if pk is None else float(pk)
+            role_idx = C.ROLE_W_SUST * sus + C.ROLE_W_PEAK * pk
+            g["items"].append((r["path"], expl, role_idx))
 
         assignments = {}
         stats = {}
@@ -167,22 +187,34 @@ class TrackCache:
             if n >= C.MIN_GENRE_SIZE:
                 mode = "rank"
                 pcts = _percentiles([x[1] for x in items])
-                stars_list = [C.stars_from_percentile(p) for p in pcts]
+                stars_list = []
+                for p, x in zip(pcts, items):
+                    base = C.stars_from_explosivity(x[1])
+                    st = C.stars_from_percentile(p)
+                    stars_list.append(max(base - C.STAR_REL_BAND, min(base + C.STAR_REL_BAND, st)))
+                rpcts = _percentiles([x[2] for x in items])
+                roles = [C.role_from_percentile(p) for p in rpcts]
             else:
                 mode = "abs"
                 pcts = [max(1, min(100, int(round(x[1] * 100)))) for x in items]
                 stars_list = [C.stars_from_explosivity(x[1]) for x in items]
+                roles = [C.role_from_score(x[2]) for x in items]
+            stars_list = [max(st, C.STAR_FLOOR_STARS) if x[1] >= C.STAR_FLOOR_EXPL else st
+                          for st, x in zip(stars_list, items)]
             counts = {s: 0 for s in range(1, 6)}
-            for (path, _), pct, st in zip(items, pcts, stars_list):
-                assignments[path] = {"genre": name, "pct": pct, "stars": st, "mode": mode, "n": n}
+            rcounts = {r: 0 for r in range(1, 5)}
+            for (path, _e, _ri), pct, st, ro in zip(items, pcts, stars_list, roles):
+                assignments[path] = {"genre": name, "pct": pct, "stars": st, "mode": mode,
+                                     "n": n, "role": ro}
                 counts[st] += 1
-            stats[name] = {"total": n, "stars": counts, "mode": mode}
+                rcounts[ro] += 1
+            stats[name] = {"total": n, "stars": counts, "roles": rcounts, "mode": mode}
 
         if commit and assignments:
             with self.lock:
                 self.conn.executemany(
-                    "UPDATE tracks SET genre_final = ?, percentile = ?, stars = ?, group_mode = ? WHERE path = ?",
-                    [(a["genre"], a["pct"], a["stars"], a["mode"], p) for p, a in assignments.items()],
+                    "UPDATE tracks SET genre_final = ?, percentile = ?, stars = ?, group_mode = ?, role = ? WHERE path = ?",
+                    [(a["genre"], a["pct"], a["stars"], a["mode"], a["role"], p) for p, a in assignments.items()],
                 )
                 self.conn.commit()
         return assignments, stats

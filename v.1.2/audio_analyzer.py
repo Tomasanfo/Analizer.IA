@@ -113,6 +113,43 @@ def dsp_features(y_drop, y_full, sr=C.SR_ANALYSIS):
 
 
 # ─────────────────────────────────────────────────────────────
+# INTENSIDAD SOSTENIDA (tema completo)
+# ─────────────────────────────────────────────────────────────
+def sustained_features(y, sr=C.SR_ANALYSIS):
+    """Cuánto empuja el tema en TODO su recorrido (no solo en el drop)."""
+    hop = C.HOP_LENGTH
+    rms = librosa.feature.rms(y=y, frame_length=C.N_FFT, hop_length=hop)[0]
+    onset = librosa.onset.onset_strength(y=y, sr=sr, hop_length=hop)
+    S = np.abs(librosa.stft(y, n_fft=C.N_FFT, hop_length=hop))
+    freqs = librosa.fft_frequencies(sr=sr, n_fft=C.N_FFT)
+    low = (S[(freqs >= 20) & (freqs <= 150)] ** 2).sum(axis=0)
+    cent = librosa.feature.spectral_centroid(S=S, sr=sr)[0]
+    try:
+        bpm = float(np.atleast_1d(librosa.feature.rhythm.tempo(onset_envelope=onset, sr=sr, hop_length=hop))[0])
+    except Exception:
+        try:
+            bpm = float(np.atleast_1d(librosa.beat.tempo(onset_envelope=onset, sr=sr, hop_length=hop))[0])
+        except Exception:
+            bpm = 0.0
+
+    frame_db = 20.0 * np.log10(rms + 1e-9)
+    active_ratio = float(np.mean(frame_db > C.ACTIVE_DB))
+    # Graves sostenidos en dB: nivel MEDIANO vs. nivel del drop (p95). En dB y con la mediana,
+    # ni los huecos entre bombos ni los breakdowns sin bajo lo hunden.
+    low_db = 10.0 * np.log10(low + 1e-12)
+    low_sustain = float(np.median(low_db) - np.percentile(low_db, 95))
+    vals = {
+        "mean_db": float(20.0 * np.log10(np.mean(rms) + 1e-9)),
+        "active": active_ratio,
+        "low": low_sustain,
+        "onset": float(np.mean(onset)),
+        "bright": float(np.mean(cent)),
+    }
+    score = sum(C.SUST_WEIGHTS[k] * C.scale01(vals[k], *C.SUST_RANGES[k]) for k in vals)
+    return {"sustained_score": float(C.clamp01(score)), "bpm": bpm, "active_ratio": active_ratio}
+
+
+# ─────────────────────────────────────────────────────────────
 # IA LOCAL: CLAP Zero-Shot
 # ─────────────────────────────────────────────────────────────
 def make_clap_chunks(y_drop):
@@ -221,9 +258,13 @@ def analyze_track(path, clap, use_ai=True, want_genre=False):
             genre_ai, genre_conf = clap.detect_genre(chunks)
 
     if ai_energy is not None:
-        explosivity = C.FUSION_WEIGHT_AI * ai_energy + C.FUSION_WEIGHT_DSP * feats["dsp_score"]
+        peak = C.FUSION_WEIGHT_AI * ai_energy + C.FUSION_WEIGHT_DSP * feats["dsp_score"]
     else:
-        explosivity = feats["dsp_score"]
+        peak = feats["dsp_score"]
+    peak = float(C.clamp01(peak))
+
+    sust = sustained_features(y)
+    explosivity = C.W_PEAK * peak + C.W_SUSTAINED * sust["sustained_score"]
 
     result = dict(feats)
     result.update({
@@ -232,6 +273,9 @@ def analyze_track(path, clap, use_ai=True, want_genre=False):
         "used_clap": 1 if ai_energy is not None else 0,
         "genre_ai": genre_ai,
         "genre_ai_conf": genre_conf,
+        "peak_score": peak,
+        "sustained_score": sust["sustained_score"],
+        "bpm": sust["bpm"],
         "explosivity": float(C.clamp01(explosivity)),
     })
     return result
